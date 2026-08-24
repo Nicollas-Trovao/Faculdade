@@ -46,6 +46,23 @@ Siga as instruções na tela para jogar!
 
 ---
 
+### 3. **Sistema de Cadastro** (`cadastro.c`)
+Programa para cadastrar e listar pessoas em memória.
+
+#### Funcionalidades:
+- Cadastro de código, nome, idade, telefone e email
+- Validação de código e idade
+- Limite de 100 pessoas por execução
+- Relatório geral ao final do cadastro
+
+#### Como usar:
+```bash
+gcc cadastro.c -o cadastro
+./cadastro
+```
+
+---
+
 ## 🛠️ Requisitos
 
 - **Compilador GCC** (ou qualquer compilador C compatível)
@@ -64,6 +81,7 @@ Siga as instruções na tela para jogar!
 portfolio-c/
 ├── cpf.c                    # Validador de CPF
 ├── adivinhacao.c            # Jogo de Adivinhação
+├── cadastro.c               # Sistema de Cadastro
 ├── README.md                # Este arquivo
 └── .vscode/                 # Configurações do VS Code
 ```
@@ -76,6 +94,7 @@ portfolio-c/
 ```bash
 gcc cpf.c -o cpf
 gcc adivinhacao.c -o adivinhacao
+gcc cadastro.c -o cadastro
 ```
 
 ### Opção 2: Usar VS Code (com extensão C/C++)
@@ -116,4 +135,4 @@ Sugestões de melhorias são bem-vindas! Abra uma *issue* ou faça um *pull requ
 
 ---
 
-**Última atualização:** 2026-08-17
+**Última atualização:** 2026-08-24

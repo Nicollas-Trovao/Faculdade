@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX 100
@@ -11,36 +12,62 @@ struct Pessoa {
     char email[100];
 };
 
-int main() {
+static void ler_texto(const char *rotulo, char *destino, size_t tamanho) {
+    printf("%s", rotulo);
+    if (fgets(destino, tamanho, stdin) == NULL) {
+        destino[0] = '\0';
+        return;
+    }
+
+    destino[strcspn(destino, "\n")] = '\0';
+}
+
+static int ler_inteiro(const char *rotulo, int *valor) {
+    char entrada[32];
+    char *fim;
+    long convertido;
+
+    printf("%s", rotulo);
+    if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
+        return 0;
+    }
+
+    convertido = strtol(entrada, &fim, 10);
+    if (fim == entrada || (*fim != '\n' && *fim != '\0')) {
+        return 0;
+    }
+
+    *valor = (int) convertido;
+    return 1;
+}
+
+int main(void) {
     struct Pessoa pessoas[MAX];
 
     int quantidade = 0;
     int i;
     char opcao = 'S';
+    char resposta[8];
 
     printf("SISTEMA DE CADASTRO\n");
 
     while (opcao == 'S' || opcao == 's') {
         printf("Cadastro %d\n", quantidade + 1);
-        printf("Codigo: ");
-        scanf("%d", &pessoas[quantidade].codigo);
-        getchar();
+        if (!ler_inteiro("Codigo: ", &pessoas[quantidade].codigo)) {
+            printf("Codigo invalido. Cadastro cancelado.\n");
+            break;
+        }
 
-        printf("Nome: ");
-        fgets(pessoas[quantidade].nome, sizeof(pessoas[quantidade].nome), stdin);
-        pessoas[quantidade].nome[strcspn(pessoas[quantidade].nome, "\n")] = '\0';
+        ler_texto("Nome: ", pessoas[quantidade].nome, sizeof(pessoas[quantidade].nome));
 
-        printf("Idade: ");
-        scanf("%d", &pessoas[quantidade].idade);
-        getchar();
+        if (!ler_inteiro("Idade: ", &pessoas[quantidade].idade) || pessoas[quantidade].idade < 0) {
+            printf("Idade invalida. Cadastro cancelado.\n");
+            break;
+        }
 
-        printf("Telefone: ");
-        fgets(pessoas[quantidade].telefone, sizeof(pessoas[quantidade].telefone), stdin);
-        pessoas[quantidade].telefone[strcspn(pessoas[quantidade].telefone, "\n")] = '\0';
+        ler_texto("Telefone: ", pessoas[quantidade].telefone, sizeof(pessoas[quantidade].telefone));
 
-        printf("Email: ");
-        fgets(pessoas[quantidade].email, sizeof(pessoas[quantidade].email), stdin);
-        pessoas[quantidade].email[strcspn(pessoas[quantidade].email, "\n")] = '\0';
+        ler_texto("Email: ", pessoas[quantidade].email, sizeof(pessoas[quantidade].email));
 
         quantidade++;
 
@@ -50,8 +77,10 @@ int main() {
         }
 
         printf("\nDeseja cadastrar outra pessoa? (S/N): ");
-        scanf(" %c", &opcao);
-        getchar();
+        if (fgets(resposta, sizeof(resposta), stdin) == NULL) {
+            break;
+        }
+        opcao = resposta[0];
     }
 
     printf("\nRELATORIO GERAL\n");
